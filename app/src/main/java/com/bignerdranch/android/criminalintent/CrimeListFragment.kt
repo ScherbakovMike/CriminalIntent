@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -55,17 +56,21 @@ class CrimeListFragment : Fragment() {
         crimeRecyclerView.adapter = adapter
     }
 
-    private inner class CrimeHolder(view: View)
-        : RecyclerView.ViewHolder(view), View.OnClickListener {
+    private inner class CrimeHolder(view: View) : RecyclerView.ViewHolder(view),
+        View.OnClickListener {
 
         private lateinit var crime: Crime
 
         private val titleTextView: TextView = itemView.findViewById(R.id.crime_title)
         private val dateTextView: TextView = itemView.findViewById(R.id.crime_date)
-
+        private val callPolice: Button? = itemView.findViewById(R.id.call_police_button)
 
         init {
             itemView.setOnClickListener(this)
+            callPolice?.setOnClickListener { _->
+                Toast.makeText(context, "The police has been award!", Toast.LENGTH_SHORT)
+                    .show()
+            }
         }
 
         fun bind(crime: Crime) {
@@ -84,7 +89,11 @@ class CrimeListFragment : Fragment() {
         RecyclerView.Adapter<CrimeHolder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CrimeHolder {
-            val view = layoutInflater.inflate(R.layout.list_item_crime, parent, false)
+            val layout = if (viewType == 0)
+                R.layout.list_item_crime
+            else R.layout.list_item_crime_requires_police
+
+            val view = layoutInflater.inflate(layout, parent, false)
             return CrimeHolder(view)
         }
 
@@ -94,5 +103,11 @@ class CrimeListFragment : Fragment() {
         }
 
         override fun getItemCount() = crimes.size
+
+        override fun getItemViewType(position: Int): Int {
+            return if (crimes[position].requiresPolice)
+                1
+            else 0
+        }
     }
 }
