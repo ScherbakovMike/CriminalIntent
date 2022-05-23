@@ -13,11 +13,13 @@
         android:text="@string/crime_title_label"/>
 
     <EditText
+        android:id="@+id/crime_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/crime_title"
+        android:autofillHints=""
         android:hint="@string/crime_title_hint"
-        android:autofillHints="" />
+        android:minHeight="48dp"
+        android:textColorHint="#757575" />
 
     <Button
         android:layout_width="match_parent"
