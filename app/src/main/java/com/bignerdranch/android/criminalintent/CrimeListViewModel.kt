@@ -9,7 +9,6 @@ import kotlin.random.Random
 
 class CrimeListViewModel : ViewModel() {
 
-
     val crimes = mutableListOf<Crime>()
 
     init {
@@ -20,7 +19,7 @@ class CrimeListViewModel : ViewModel() {
 
     suspend fun loadCrimes():List<Crime> {
         val result = mutableListOf<Crime>()
-        delay(1)
+        delay(5000)
         for (i in 0 until 100) {
             val crime = Crime(
                 id = UUID.randomUUID(),
