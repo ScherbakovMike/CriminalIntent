@@ -16,6 +16,8 @@ class CrimeRepository private constructor(context: Context) {
             DATABASE_NAME
         )
         .createFromAsset(DATABASE_NAME)
+        //.fallbackToDestructiveMigration()
+        .allowMainThreadQueries()
         .build()
 
     suspend fun getCrimes(): List<Crime> =
