@@ -7,8 +7,7 @@ import java.util.*
 @Entity
 data class Crime(
     @PrimaryKey val id: UUID,
-    var title: String = "",
-    var date: Date = Date(),
-    var isSolved: Boolean = false,
-    var requiresPolice: Boolean = false
+    val title: String,
+    val date: Date,
+    val isSolved: Boolean
 )

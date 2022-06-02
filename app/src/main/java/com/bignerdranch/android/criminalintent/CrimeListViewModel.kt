@@ -2,23 +2,23 @@ package com.bignerdranch.android.criminalintent
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.bignerdranch.android.criminalintent.database.CrimeRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class CrimeListViewModel : ViewModel() {
-
     private val crimeRepository = CrimeRepository.get()
 
-    val crimes = mutableListOf<Crime>()
+    private val _crimes: MutableStateFlow<List<Crime>> = MutableStateFlow(emptyList())
+    val crimes: StateFlow<List<Crime>>
+        get() = _crimes.asStateFlow()
 
     init {
         viewModelScope.launch {
-            crimes += loadCrimes()
+            crimeRepository.getCrimes().collect {
+                _crimes.value = it
+            }
         }
     }
-
-    suspend fun loadCrimes(): List<Crime> {
-        return crimeRepository.getCrimes()
-    }
-
 }

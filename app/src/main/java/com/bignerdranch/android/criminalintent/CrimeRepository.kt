@@ -1,8 +1,9 @@
-package com.bignerdranch.android.criminalintent.database
+package com.bignerdranch.android.criminalintent
 
 import android.content.Context
 import androidx.room.Room
-import com.bignerdranch.android.criminalintent.Crime
+import com.bignerdranch.android.criminalintent.database.CrimeDatabase
+import kotlinx.coroutines.flow.Flow
 import java.util.*
 
 private const val DATABASE_NAME = "crime-database"
@@ -16,15 +17,11 @@ class CrimeRepository private constructor(context: Context) {
             DATABASE_NAME
         )
         .createFromAsset(DATABASE_NAME)
-        //.fallbackToDestructiveMigration()
-        .allowMainThreadQueries()
         .build()
 
-    suspend fun getCrimes(): List<Crime> =
-        database.crimeDao().getCrimes()
+    fun getCrimes(): Flow<List<Crime>> = database.crimeDao().getCrimes()
 
-    suspend fun getCrime(id: UUID): Crime? =
-        database.crimeDao().getCrime(id)
+    suspend fun getCrime(id: UUID): Crime = database.crimeDao().getCrime(id)
 
     companion object {
         private var INSTANCE: CrimeRepository? = null
@@ -36,9 +33,8 @@ class CrimeRepository private constructor(context: Context) {
         }
 
         fun get(): CrimeRepository {
-            return INSTANCE ?:
-            throw IllegalStateException("CrimeRepository must be initialized")
+            return INSTANCE
+                ?: throw IllegalStateException("CrimeRepository must be initialized")
         }
-
     }
 }
